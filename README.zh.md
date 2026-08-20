@@ -2,6 +2,8 @@
 
 [English](./README.md) | [简体中文](./README.zh.md)
 
+[![CI](https://github.com/JohnXu22786/memory-standard/actions/workflows/ci.yml/badge.svg)](https://github.com/JohnXu22786/memory-standard/actions/workflows/ci.yml)
+
 面向 DeepSeek Harness（dsh）的**记忆标准协议（mm）** 插件：一种确定性、分层、
 跨 agent 互认的记忆系统，基于普通 Markdown 文件——而非专有协议。
 

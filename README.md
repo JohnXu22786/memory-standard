@@ -2,6 +2,8 @@
 
 [English](./README.md) | [简体中文](./README.zh.md)
 
+[![CI](https://github.com/JohnXu22786/memory-standard/actions/workflows/ci.yml/badge.svg)](https://github.com/JohnXu22786/memory-standard/actions/workflows/ci.yml)
+
 A **Memory Standard Protocol (mm)** plugin for the DeepSeek Harness (dsh): a
 deterministic, layered, cross-agent memory system built on plain markdown
 files — not a proprietary protocol.
