@@ -52,8 +52,14 @@ and bundle format (`dsh.bundle.patch` + `cordis.patch.yml` + `apply(ctx)`).
 From the directory that contains this package (`dsh-memory-standard/`):
 
 ```bash
-# install the bundle into a dsh profile (creates the profile on first use)
 dsh plugin --profile demo add ./
+
+# or install directly from this GitHub repository
+dsh plugin --profile demo add github:JohnXu22786/memory-standard
+# or from npm once published
+dsh plugin --profile demo add dsh-memory-standard
+# the standalone CLI is also published as a global npm bin
+npm install -g dsh-memory-standard
 
 # boot the profile; the five mem_* tools + the 'memory-standard' system section load
 dsh --profile demo
@@ -64,7 +70,6 @@ dsh --profile demo
 resolve from the dsh installation. Verified against `dsh@0.1.0-rc.6`.
 
 > Notes for other install paths:
-> - Published to npm → `dsh plugin --profile demo add dsh-memory-standard`.
 > - As a dev overlay → copy `cordis.patch.yml` and point a `--patch` overlay at
 >   the package's entry (`name` = package name for the row).
 > - The plugin auto-initializes the memory root (`$DSH_HOME/memory`, or

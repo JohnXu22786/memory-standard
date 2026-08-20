@@ -42,8 +42,14 @@ dsh 生态为开发者预览期；格式版本 `mm v1`（见 [`SPEC.md`](SPEC.md
 在包含本包的目录（`dsh-memory-standard/`）内执行：
 
 ```bash
-# 把 bundle 安装进一个 dsh profile（首次使用会自动创建）
 dsh plugin --profile demo add ./
+
+# 或直接从本 GitHub 仓库安装
+dsh plugin --profile demo add github:JohnXu22786/memory-standard
+# 或发布后从 npm 安装
+dsh plugin --profile demo add dsh-memory-standard
+# 独立的 CLI 也会以全局 npm bin 形式发布
+npm install -g dsh-memory-standard
 
 # 启动 profile，五个 mem_* 工具与 'memory-standard' 系统段随之加载
 dsh --profile demo
@@ -54,7 +60,6 @@ dsh --profile demo
 已在 `dsh@0.1.0-rc.6` 上验证。
 
 > 其他安装路径：
-> - 发布到 npm 后：`dsh plugin --profile demo add dsh-memory-standard`。
 > - 作为开发 overlay：将 `cordis.patch.yml` 复制或引用到 `--patch` 覆盖层，
 >   行内 `name` 指向本包入口。
 > - 插件首次加载会自动初始化记忆根（`$DSH_HOME/memory` 或 `$DSH_MEMORY_ROOT`），
