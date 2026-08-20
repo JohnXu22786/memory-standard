@@ -16,6 +16,14 @@
     "sqlite"
   ],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JohnXu22786/memory-standard.git"
+  },
+  "homepage": "https://github.com/JohnXu22786/memory-standard",
+  "bugs": {
+    "url": "https://github.com/JohnXu22786/memory-standard/issues"
+  },
   "type": "module",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -56,7 +64,8 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "npm run build && node --test"
+    "test": "npm run build && node --test",
+    "prepublishOnly": "npm run typecheck && node --test"
   },
   "peerDependencies": {
     "@deepseek-ai/cordis": "^4.0.1",
