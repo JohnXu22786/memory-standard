@@ -1,0 +1,45 @@
+# dsh-memory-standard — bundle patch layer.
+#
+# A dsh bundle contributes a configuration layer: a YAML ARRAY of patch
+# operations. This patch INSERTs the plugin row that mounts
+# dsh-memory-standard. Later layers (profile cordis.patch.yml, $DSH_HOME
+# overrides, `--patch` overlays) may override this row by `id` to tune the
+# config; the whole `config` object is replaced on an override, so restate
+# every field you want to keep.
+#
+# The row's `name` is the npm package name; the loader resolves it from the
+# dsh installation first, then from the profile's own node_modules. The
+# plugin entry exports `inject = ['tools', 'systemPrompt']` and
+# `Config` (a schemastery schema), so no `inject` field is needed on the row.
+
+- insert:
+    - id: memory-standard
+      name: dsh-memory-standard
+      disabled: false
+      config:
+        # Memory root. Empty string means "auto": $DSH_MEMORY_ROOT, else the
+        # dsh home ($DSH_HOME or ~/.dsh)/memory.
+        root: !!js process.env.DSH_MEMORY_ROOT?.trim() || ''
+        # Stable identifier used in cross-agent URIs: mm://<memoryId>/<topic>.
+        memoryId: local
+        # Hard cap on the MEMORY.md index: lines and UTF-8 bytes. Exceeding is
+        # an error demanding an index rewrite — never a silent truncation.
+        indexLines: 200
+        indexBytes: 25600
+        # Hard cap (UTF-8 bytes) on a single detail memory file.
+        detailMaxBytes: 65536
+        # Default per-write character budget (Unicode code points) when the
+        # caller does not pass an explicit `budget`.
+        defaultWriteBudget: 4000
+        search:
+          # auto = SQLite FTS5 when node:sqlite + FTS5 are available, else scan.
+          mode: auto
+          limit: 10
+          maxSnippetChars: 160
+        nudge:
+          # Session-end / periodic nudging: emits `memory/nudge` events and
+          # logs a budget + pending-write report. Off by default; enable here.
+          enabled: true
+          intervalMs: 1800000
+        # Language of the system-prompt guidance section (auto = English).
+        lang: auto

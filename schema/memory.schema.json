@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh-memory-standard.placeholder/memory.schema.json#note",
+  "title": "Memory Standard note (mm)",
+  "description": "A single memory note as exposed by the Memory Standard Protocol (mm). Any compliant writer produces these fields; any compliant reader consumes them. The canonical on-disk representation is MEMORY.md (index) + memories/<topic>.md (detail), addressed by mm://<memoryId>/<topic> URIs.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["topic", "memoryId", "summary", "tags", "file", "updated", "bodyChars", "writeBudget", "entryBody", "uri", "body", "missingFile"],
+  "properties": {
+    "topic": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$",
+      "maxLength": 64,
+      "description": "Portable ASCII slug used as the URI segment and detail filename."
+    },
+    "memoryId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$",
+      "description": "The memory id used in mm://<memoryId>/<topic> URIs."
+    },
+    "uri": {
+      "type": "string",
+      "description": "Canonical cross-agent address: mm://<memoryId>/<topic>."
+    },
+    "summary": {
+      "type": "string",
+      "description": "One-line summary stored in the index."
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Normalized tag list."
+    },
+    "file": {
+      "type": "string",
+      "description": "Relative detail-file path with POSIX separators, e.g. memories/alpha.md."
+    },
+    "updated": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 UTC timestamp of the last write."
+    },
+    "bodyChars": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Body length in Unicode code points at the time of the last write."
+    },
+    "writeBudget": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "The per-write character budget the body was admitted under."
+    },
+    "entryBody": {
+      "type": "string",
+      "description": "Free-form body lines that live inside the index entry (preserved verbatim)."
+    },
+    "missingFile": {
+      "type": "boolean",
+      "description": "True when the index references a detail file that does not exist."
+    },
+    "body": {
+      "type": "string",
+      "description": "Free-form markdown body (any language)."
+    }
+  }
+}
