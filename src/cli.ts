@@ -87,6 +87,15 @@ function flagBool(args: Args, name: string): boolean {
   return args.flags.get(name) === true || flagStr(args, name) === 'true'
 }
 
+/** A non-negative integer flag, or undefined when not provided; fails on garbage. */
+function intFlag(args: Args, name: string): number | undefined {
+  const raw = flagStr(args, name)
+  if (raw === undefined) return undefined
+  const n = Number(raw)
+  if (!Number.isInteger(n) || n < 0) fail(`${name} expects a non-negative integer (got "${raw}")`)
+  return n
+}
+
 function fail(message: string, code = 1): never {
   process.stderr.write(`dsh-memory: ${message}\n`)
   process.exit(code)
@@ -128,14 +137,14 @@ async function main(argv: string[]): Promise<void> {
     case 'write': {
       const topic = rest[0] ?? fail('write requires a <topic>')
       const content = flagStr(args, '--content') ?? fail('write requires --content TEXT')
-      const budget = flagStr(args, '--budget')
+      const budget = intFlag(args, '--budget')
       const memory = openMemory(args)
       let outcome
       try {
         outcome = memory.write({
           topic,
           content,
-          budget: budget !== undefined ? Number.parseInt(budget, 10) : undefined,
+          budget,
           summary: flagStr(args, '--summary'),
           tags: flagStr(args, '--tags'),
         })
@@ -204,13 +213,12 @@ async function main(argv: string[]): Promise<void> {
     case 'search': {
       const query = rest[0] ?? fail('search requires a <query>')
       const modeArg = flagStr(args, '--mode') ?? 'auto'
-      const limitArg = flagStr(args, '--limit')
+      const limit = intFlag(args, '--limit')
       const memory = openMemory(args)
       const mode = modeArg === 'scan' || modeArg === 'fts5' ? modeArg : 'auto'
-      const limit = limitArg !== undefined ? Number.parseInt(limitArg, 10) : undefined
       const result = memory.search(query, {
         mode,
-        limit: limit !== undefined && Number.isInteger(limit) && limit > 0 ? limit : undefined,
+        limit: limit !== undefined && limit > 0 ? limit : undefined,
       })
       if (json) printJson(result)
       else {
@@ -246,13 +254,13 @@ async function main(argv: string[]): Promise<void> {
     case 'digest': {
       const file = flagStr(args, '--file')
       const text = flagStr(args, '--text')
-      const maxItems = flagStr(args, '--max-items')
+      const maxItems = intFlag(args, '--max-items')
       const topicHint = flagStr(args, '--topic-hint')
       const memory = openMemory(args)
       const result = memory.digest({
         file,
         source: text,
-        maxItems: maxItems !== undefined ? Number.parseInt(maxItems, 10) : undefined,
+        maxItems,
         topicHint,
       })
       if (json) printJson(result)
