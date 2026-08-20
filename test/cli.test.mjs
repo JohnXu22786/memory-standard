@@ -125,3 +125,33 @@ test('cli digest prints candidates for a file source', () => {
     cleanup(dir)
   }
 })
+
+test('cli uri prints the canonical mm URI for a topic', () => {
+  const dir = tempDir()
+  try {
+    const u = run(['uri', 'deploy-region', '--root', dir])
+    assert.equal(u.code, 0)
+    assert.match(u.stdout.trim(), /^mm:\/\/local\/deploy-region$/)
+  } finally {
+    cleanup(dir)
+  }
+})
+
+test('cli rejects non-numeric numeric flags with a clear error', () => {
+  const dir = tempDir()
+  try {
+    const w = run(['write', 'alpha', '--content', 'x', '--budget', 'abc', '--root', dir])
+    assert.equal(w.code, 1)
+    assert.match(w.stderr, /--budget/)
+
+    const s = run(['search', 'x', '--limit', 'nope', '--root', dir])
+    assert.equal(s.code, 1)
+    assert.match(s.stderr, /--limit/)
+
+    const d = run(['digest', '--text', 'x', '--max-items', '-3', '--root', dir])
+    assert.equal(d.code, 1)
+    assert.match(d.stderr, /--max-items/)
+  } finally {
+    cleanup(dir)
+  }
+})
