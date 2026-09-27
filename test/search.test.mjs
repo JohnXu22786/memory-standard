@@ -64,7 +64,7 @@ test('limit and truncation flag are respected', () => {
   }
 })
 
-test('fts5 search path works when node:sqlite is available', () => {
+test('fts5 search path works when node:sqlite is available', { skip: !requiresSqlite() }, () => {
   const dir = tempDir()
   try {
     const m = seeded(dir)
@@ -124,7 +124,7 @@ test('snippets are bounded to maxSnippetChars', () => {
   }
 })
 
-test('fts5 search with a multi-word query does not throw', () => {
+test('fts5 search with a multi-word query does not throw', { skip: !requiresSqlite() }, () => {
   const dir = tempDir()
   try {
     const m = seeded(dir)
@@ -136,8 +136,7 @@ test('fts5 search with a multi-word query does not throw', () => {
   }
 })
 
-test('fts5 reports the uncapped total and truncation flag', () => {
-  if (!requiresSqlite()) return
+test('fts5 reports the uncapped total and truncation flag', { skip: !requiresSqlite() }, () => {
   const dir = tempDir()
   try {
     const m = Memory.ensure({ root: dir })
@@ -154,8 +153,7 @@ test('fts5 reports the uncapped total and truncation flag', () => {
   }
 })
 
-test('fts5 total agrees with matches even when prose contains the word "or"', () => {
-  if (!requiresSqlite()) return
+test('fts5 total agrees with matches even when prose contains the word "or"', { skip: !requiresSqlite() }, () => {
   const dir = tempDir()
   try {
     const m = Memory.ensure({ root: dir })
